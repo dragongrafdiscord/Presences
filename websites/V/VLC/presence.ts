@@ -2,7 +2,7 @@ const presence = new Presence({
 		clientId: "721748388143562852",
 	}),
 	strings = presence.getStrings({
-		play: "general.playing",
+		play: "general.listening",
 		pause: "general.paused",
 		browsing: "general.browsing",
 	}),
@@ -59,7 +59,7 @@ presence.on("UpdateData", async () => {
 			elapsed = Math.floor(Date.now() / 1000);
 		}
 
-		if (media.state === "playing" || media.state === "paused") {
+		if (media.state === "listening" || media.state === "paused") {
 			if (isSong) {
 				if (media.title && media.album && media.title === media.album)
 					media.album = null;
@@ -112,7 +112,7 @@ presence.on("UpdateData", async () => {
 					? Assets.Repeat
 					: media.repeat === "true" && media.loop === "false"
 					? Assets.RepeatOne
-					: media.state === "playing"
+					: media.state === "listening"
 					? Assets.Play
 					: Assets.Pause;
 
@@ -123,14 +123,14 @@ presence.on("UpdateData", async () => {
 					? "All on loop"
 					: media.repeat === "true" && media.loop === "false"
 					? "On loop"
-					: media.state === "playing"
+					: media.state === "listening"
 					? (await strings).play
 					: (await strings).pause;
 
 			[presenceData.startTimestamp, presenceData.endTimestamp] =
 				presence.getTimestamps(Number(media.time), Number(media.length));
 
-			if (media.state === "playing") presence.setActivity(presenceData, true);
+			if (media.state === "listening") presence.setActivity(presenceData, true);
 			else {
 				delete presenceData.startTimestamp;
 				delete presenceData.endTimestamp;
